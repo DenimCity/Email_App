@@ -8,7 +8,7 @@ const router = express.Router({mergeParams: true})
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth:{
-    user:process.env.GMAI_ADDRESS,
+    user:process.env.GMAIL_ADDRESS,
     passord:process.env.GMAIL_PASSWORD
   }
 })
