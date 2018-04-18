@@ -20,6 +20,9 @@ connection.on('error', (err) => {
 app.use(morgan('dev'))
 app.use(bodyParser.json());
 
+const mail = require('./routes/mailController')
+app.use('/mailapi/', mail)
+console.log('hit the mail route on server startup',mail);
 
 app.use(express.static(__dirname + '/client/build/'));
 app.get('/', (req,res) => {
