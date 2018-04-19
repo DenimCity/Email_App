@@ -10,19 +10,21 @@ mongoose.connect(process.env.MONGODB_URI);
 
 const connection = mongoose.connection;
 connection.on('connected', () => {
+
   console.log('Mongoose Database Connected Successfully');    
 }); 
 
 connection.on('error', (err) => {
   console.log('Mongoose default connection error: ' + err);
-}); 
+});
+
 
 app.use(morgan('dev'))
 app.use(bodyParser.json());
 
 
 app.use('/mailapi/', require('./routes/mailController'))
-
+app.use('/api/user', require('./routes/userController'))
 
 app.use(express.static(__dirname + '/client/build/'));
 app.get('/', (req,res) => {
