@@ -1,44 +1,47 @@
 const express = require('express')
 const nodemailer = require('nodemailer')
 const router = express.Router({mergeParams: true})
+require('dotenv').config()
 
 
 
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth:{
-    user:process.env.GMAIL_ADDRESS,
-    passord:process.env.GMAIL_PASSWORD
-  }
+
+
+router.post('/:email', (req, res) => {
+  const { email } = req.params 
+  nodemailer.createTestAccount((err, account) => {
+      let transporter = nodemailer.createTransport({
+        service:"Gmail", 
+          auth: {
+              user: process.env.GMAIL_ADDRESS,            
+              pass: process.env.GMAIL_PASSWORD 
+          }
+      });
+
+      let mailOptions = {
+          from: '"Jean Altidor " <altidorj1.com>', 
+          to: email, 
+          subject: 'FROM JEAN THE MACHINE EMAIL APP', 
+          text: 'Hi How are you?', 
+          html: `<b>Jean Was Here!!!</b>
+          `
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        const { emailDetails } = mailOptions
+          if (error) {
+              return console.log(error);
+          } else {
+            res.json({
+              message: `Email Successfuly Sent`,
+              success:`Message was sent to ${mailOptions.to}`
+            })
+          }
+          console.log('Message sent: %s', info.messageId);
+          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      });
+  });
 })
-router.post('/:email', (req, res, next) => {
-  const mailDetails = {
-    from: process.env.GMAI_ADDRESS,
-    to:req.params.email,
-    subject: 'FROM JEAN THE MACHINE EMAIL APP',
-    html:`<h1>Hi This is Jean</h1>
-          <h2>I hope your're have a great day</h2>
-          <h5>Checkout my twitter page www.twitter.com/JW_Altidor</h5>
-    `
-  }
-
-  transporter.sendMail(mailDetails, (err, info) => {
-    if(err){
-      console.log(`The error is => ${err}`)
-      res.json(err)
-    } else {
-      console.log(`the info => ${info}`)
-      res.json(info)
-    }
-  })
-
-
-  res.json({
-    success:true,
-    message:'Email Sent!'
-  })
-    })
-
 
 module.exports = router
