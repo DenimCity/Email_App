@@ -22,7 +22,7 @@ mongoose.Promise = global.Promise
   },
   password:  {
       type: String,
-      
+      required:true
   }
 },{
   timestamps: {},
