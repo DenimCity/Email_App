@@ -31,7 +31,7 @@ router.get('/:email', async(req, res) => {
 
 })
 
-router.post('/', async(req, res) => {
+router.post('/register', async(req, res) => {
   try {
     const email = await User.find({email: req.body.email})
     if (email.length < 1) {
