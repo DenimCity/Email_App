@@ -25,8 +25,8 @@ router.get('/:email', async(req, res) => {
       res.json(user)
     })
     .catch((err) => {
-      console.log( err);
-      res.json({err:'could not find user by email' });
+      console.log(err);
+      res.json({err: 'could not find user by email'});
     })
 
 })
@@ -37,10 +37,13 @@ router.post('/', async(req, res) => {
     if (email.length < 1) {
       bcrypt.hash(req.body.password, saltRounds, async(err, hash) => {
         const user = {
-          firstName: req.body.firstName.trim(),
-          lastName: req.body.lastName.trim(),
-          email: req.body.email.toLowerCase().trim(),
-          password: hash.trim()
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req
+            .body
+            .email
+            .toLowerCase(),
+          password: hash
         }
 
         const newUser = await User.create(user)
@@ -59,7 +62,7 @@ router.patch('/:email', async(req, res) => {
   const email = req.params.email
   const newInfo = req.body
   try {
-    const user = await User.findOneAndUpdate(email, newInfo, {new: true})
+    const user = await User.findOneAndUpdate(email, newInfo)
     res.json(user)
   } catch (err) {
     console.log(err)
@@ -75,6 +78,23 @@ router.delete('/:email', async(req, res) => {
     .then(() => {
       res.json({message: "user deleted via email"})
     })
+})
+
+router.post('/login', async(req, response) => {
+  const {password, email, user} = req.body
+  try {
+    const user = await User.find({email})
+    if (!user.length) {
+      response.json({error: "That e-mail does not belong to a user"})
+    } else if (bcrypt.compareSync(password, user[0].password)) {
+      response.json({email, message: "Logged In"})
+    } else {
+      response.json({error: "The password is incorrect. Please try again."})
+    }
+  } catch (err) {
+    console.log(err)
+    res.json({message: "Error Loggin in "})
+  }
 })
 
 module.exports = router
