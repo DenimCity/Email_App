@@ -80,16 +80,20 @@ router.delete('/:email', async(req, res) => {
     })
 })
 
-router.post('/login', async(req, response) => {
-  const {password, email, user} = req.body
+router.post('/login', async(req, res) => {
+  const {password, email, emailConfirmed} = req.body
   try {
     const user = await User.find({email})
     if (!user.length) {
-      response.json({error: "That e-mail does not belong to a user"})
-    } else if (bcrypt.compareSync(password, user[0].password)) {
-      response.json({email, message: "Logged In"})
+      res.json({error: "That e-mail does not belong to a user"})
+    } 
+    // else if (!user.emailConfirmed === false){
+      
+    // }
+    else if (bcrypt.compareSync(password, user[0].password)) {
+      res.json({email, message: "Logged In"})
     } else {
-      response.json({error: "The password is incorrect. Please try again."})
+      res.json({error: "The password is incorrect. Please try again."})
     }
   } catch (err) {
     console.log(err)
