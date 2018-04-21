@@ -1,19 +1,9 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import {Redirect} from 'react-router-dom'
+import {Redirect, Link} from 'react-router-dom'
 import swal from 'sweetalert'
 import validator from 'validator'
 
-const passwordValidator = require('password-validator');
-const schema = new
-passwordValidator();
-schema
-  .has()
-  .not()
-  .spaces()
-  .is()
-  .not()
-  .oneOf(['password', 'Password', 'Passw0rd', 'Password123']);
 export default class Register extends Component {
 
   state = {
@@ -29,7 +19,7 @@ export default class Register extends Component {
 
  
 
-  signUpUser = async(e) => {
+  signUpUser = async (e) => {
     const {newUser} = this.state
     e.preventDefault()
     try {
@@ -59,7 +49,7 @@ export default class Register extends Component {
   }
 
   render() {
-
+    
     if (this.state.redirect) {
       return <Redirect to="/"/>
     }
@@ -104,9 +94,9 @@ export default class Register extends Component {
             placeholder="Password"/>
           <button>Sign Up</button>
         </form>
-        <a href="/">
+        <Link  to="/">
           <button>Cancel</button>
-        </a>
+        </Link>
       </div>
     )
   }
