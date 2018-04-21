@@ -39,8 +39,8 @@ router.post('/register', async(req, res) => {
       bcrypt.hash(password, saltRounds, async(err, hash) => {
 
         const user = {
-          firstName: req.body.firstName.trim(),
-          lastName: req.body.lastName.trim(),
+          firstName: req.body.firstName.toUpperCase().trim(),
+          lastName: req.body.lastName.toUpperCase().trim(),
           email: req
             .body
             .email
