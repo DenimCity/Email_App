@@ -2,6 +2,18 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import {Redirect} from 'react-router-dom'
 import swal from 'sweetalert'
+import validator from 'validator'
+
+const passwordValidator = require('password-validator');
+const schema = new
+passwordValidator();
+schema
+  .has()
+  .not()
+  .spaces()
+  .is()
+  .not()
+  .oneOf(['password', 'Password', 'Passw0rd', 'Password123']);
 export default class Register extends Component {
 
   state = {
@@ -9,41 +21,42 @@ export default class Register extends Component {
       firstName: '',
       lastName: '',
       email: '',
-      password: ''
+      password: '',
+      passwordConfirmation: ''
     },
     redirect: false
   }
 
-  signUpUser = (e) => {
-    e.preventDefault()
-    axios
-      .post('/api/user/register', this.state.newUser)
-      .then(response => {
-        // if(response.data.newUser.email){
-        //   prompt('this email has already been used')
-        // }
-        // console.log('response.data.newUser.email', response.data.newUser.email);
-        localStorage.setItem('email', response.data.newUser.email)
-        // console.log('local storage data', localStorage);
-        this.setState({redirect: true})
-      })
-      .catch((err) => {
-        console.log('Error: with submission ', err);
+ 
 
-      })
+  signUpUser = async(e) => {
+    const {newUser} = this.state
+    e.preventDefault()
+    try {
+        await axios
+          .post('/api/user/register', newUser)
+          .then(response => {
+            if (response.data.error) {
+              swal('this email has already been used')
+            }
+            localStorage.setItem('email', response.data.newUser.email)
+            console.log('local storage data', localStorage);
+            this.setState({redirect: true})
+          })
+      
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
   handleChange = (e) => {
     const attribute = e.target.name
     const value = e.target.value
-    const newUser = {
-      ...this.state.newUser
-    }
+    const newUser = {...this.state.newUser}
     newUser[attribute] = value
     this.setState({newUser})
   }
-
- 
 
   render() {
 
@@ -58,6 +71,7 @@ export default class Register extends Component {
             type="text"
             onChange={this.handleChange}
             name="firstName"
+            regex="[!@#\$%&\*]?"
             value={this.state.firstName}
             placeholder="First Name"/>
           <input
@@ -65,7 +79,7 @@ export default class Register extends Component {
             onChange={this.handleChange}
             name="lastName"
             value={this.state.lastName}
-            placeholder="Last Lame"/>
+            placeholder="Last Name"/>
           <input
             type="text"
             onChange={this.handleChange}
@@ -76,13 +90,23 @@ export default class Register extends Component {
             type="text"
             onChange={this.handleChange}
             name="password"
+            minLength="5"
+            maxLength='20'
             value={this.state.password}
             placeholder="Password"/> {/* <input type="text" onChange={this.handleChange} name="password"  placeholder=" Confirm Password"/> */}
+          <input
+            type="text"
+            onChange={this.handleChange}
+            name="password"
+            minLength="5"
+            maxLength='20'
+            value={this.state.passwordConfirmation}
+            placeholder="Password"/>
           <button>Sign Up</button>
         </form>
         <a href="/">
           <button>Cancel</button>
-          </a>
+        </a>
       </div>
     )
   }
