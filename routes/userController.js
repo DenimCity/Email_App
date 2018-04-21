@@ -84,23 +84,32 @@ router.delete('/:email', async(req, res) => {
 })
 
 router.post('/login', async(req, res) => {
-  const {password, email, emailConfirmed} = req.body
+  const {password, email} = req.body
   try {
     const user = await User.find({email})
+    
+  
+    const email_confirmation = user.map(function(detail){
+      return (detail.emailConfirmed);
+    });
+
     if (!user.length) {
-      res.json({error: "That e-mail does not belong to a user"})
+      res.json({emailError: "Email not in database"})
     } 
-    // else if (!user.emailConfirmed === false){
-      
+    // else if (email_confirmation[0] === false){
+    //   res.json({emailNotConfirmed:'email confirmation needed'})
+    // }
+    // else if (email_confirmation[0] === true){
+    //   res.json({emailConfirmed:'email conformed'})
     // }
     else if (bcrypt.compareSync(password, user[0].password)) {
-      res.json({email, message: "Logged In"})
+      res.json({email: true, passwordFound: true })
     } else {
-      res.json({error: "The password is incorrect. Please try again."})
+      res.json({passwordError: "The password is incorrect. Please try again."})
     }
   } catch (err) {
     console.log(err)
-    res.json({message: "Error Loggin in "})
+    res.json({randomError: "Error Loggin in "})
   }
 })
 
