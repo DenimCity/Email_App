@@ -32,26 +32,29 @@ router.get('/:email', async(req, res) => {
 })
 
 router.post('/register', async(req, res) => {
+  const password = req.body.password
   try {
     const email = await User.find({email: req.body.email})
     if (email.length < 1) {
-      bcrypt.hash(req.body.password, saltRounds, async(err, hash) => {
+      bcrypt.hash(password, saltRounds, async(err, hash) => {
+
         const user = {
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
+          firstName: req.body.firstName.trim(),
+          lastName: req.body.lastName.trim(),
           email: req
             .body
             .email
-            .toLowerCase(),
-          password: hash
+            .toLowerCase().trim(),
+          password: hash.trim()
         }
 
-        const newUser = await User.create(user)
-        newUser.save()
+        const newUser =  await User.create(user)
+        await newUser.save()
         res.json({newUser})
       })
     } else {
-      res.json({err: 'That e-mail addresss is already in use'})
+      console.log({err: 'This e-mail addresss is already in use'})
+      res.json({err:'This e-mail addresss is already in use'})
     }
   } catch (err) {
     console.log(err)
