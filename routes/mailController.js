@@ -4,10 +4,6 @@ const router = express.Router({mergeParams: true})
 require('dotenv').config()
 
 
-
-
-
-
 router.post('/:email', (req, res) => {
   const { email } = req.params 
   nodemailer.createTestAccount((err, account) => {
