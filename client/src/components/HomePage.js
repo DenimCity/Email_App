@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
-import Login from './Login'
-import Register from './Register'
+import {Link} from 'react-router-dom'
 export default class HomePage extends Component {
 
   state = {}
@@ -12,14 +11,14 @@ export default class HomePage extends Component {
       <Container>
 
         <div>
-          <a href="/login">
+          <Link to="/login">
             <button>Login</button>
-          </a>
+          </Link>
         </div>
         <div>
-          <a href="/register">
+          <Link to="/register">
             <button>Sign Up</button>
-          </a>
+          </Link>
         </div>
 
       </Container>
