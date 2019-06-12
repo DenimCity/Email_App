@@ -1,33 +1,35 @@
 {
-  "engines": {
-    "node": "9.4.0"
-  },
-  "name": "send_emails",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "concurrently \"nodemon server.js\" \"cd ./client  && npm start \" ",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "cd client && npm install && npm run build"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "bcrypt": "^2.0.0",
-    "body-parser": "^1.18.2",
-    "concurrently": "^3.5.1",
-    "dotenv": "^5.0.1",
-    "express": "^4.16.3",
-    "express-session": "^1.15.6",
-    "joi": "^13.1.2",
-    "mongodb": "^3.0.5",
-    "mongoose": "^5.0.7",
-    "morgan": "^1.9.0",
-    "nodemailer": "^4.6.4",
-    "nodemon": "^1.17.1",
-    "npm": "^5.8.0"
-  }
+    "engines": {
+        "node": "^10.x.x"
+    },
+    "name": "send_emails",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "server": "node index.js",
+        "dev:server": "nodemon index.js",
+        "dev": "concurrently \" npm run server\" \"cd ./client  && npm start \" ",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "postinstall": "cd client && npm install && npm run build"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.19.0",
+        "concurrently": "^3.5.1",
+        "dotenv": "^5.0.1",
+        "esm": "^3.2.25",
+        "express": "^4.16.3",
+        "express-session": "^1.15.6",
+        "log4js": "^4.3.1",
+        "morgan": "^1.9.0",
+        "nodemailer": "^4.6.4",
+        "npm": "^6.9.0",
+        "request": "^2.88.0"
+    },
+    "devDependencies": {
+        "nodemon": "^1.19.1"
+    }
 }
